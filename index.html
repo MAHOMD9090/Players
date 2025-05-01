@@ -275,7 +275,7 @@
         </div>
         
         <div class="game-area" id="gameArea">
-            <div class="progress">لاعب رقم <span id="currentPlayerNum">1</span> من <span id="totalPlayers">5</span></div>
+            
             
             <div class="player-card">
                 <div class="player-image-container">
@@ -315,7 +315,7 @@
         const playerClub = document.getElementById('playerClub');
         const prevPlayerBtn = document.getElementById('prevPlayer');
         const nextPlayerBtn = document.getElementById('nextPlayer');
-        const currentPlayerNumSpan = document.getElementById('currentPlayerNum');
+        
         const totalPlayersSpan = document.getElementById('totalPlayers');
         // عناصر DOM الجديدة
         const endGameBtn = document.getElementById('endGame');
@@ -395,12 +395,9 @@
                 return;
             }
             
-            // تحديث واجهة المستخدم
-            currentPlayerNumSpan.textContent = currentIndex + 1;
-            totalPlayersSpan.textContent = totalPlayers;
-            gameArea.style.display = 'flex';
-
             currentIndex = startPlayer - 1;
+            
+            gameArea.style.display = 'flex';
             
             // تحميل اللاعب الأول
             loadPlayer();
@@ -415,7 +412,7 @@
             playerName.textContent = player.name;
             playerClub.textContent = player.club || 'غير محدد';
             
-            currentPlayerNumSpan.textContent = currentIndex + 1;
+            
         }
         
         // تحديث أزرار التنقل
