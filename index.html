@@ -395,12 +395,12 @@
                 return;
             }
             
-            //currentIndex = startPlayer - 1;
-            
             // تحديث واجهة المستخدم
             currentPlayerNumSpan.textContent = currentIndex + 1;
             totalPlayersSpan.textContent = totalPlayers;
             gameArea.style.display = 'flex';
+
+            currentIndex = startPlayer - 1;
             
             // تحميل اللاعب الأول
             loadPlayer();
