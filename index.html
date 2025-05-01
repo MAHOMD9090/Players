@@ -219,7 +219,32 @@
                 max-width: 200px;
             }
         }
+        .game-summary {
+        text-align: center;
+        padding: 20px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin: 20px;
+    }
+    
+    .game-summary h2 {
+        color: #2E7D32;
+        margin-bottom: 20px;
+    }
+    
+    .game-summary p {
+        font-size: 18px;
+        margin-bottom: 30px;
+    }
+    
+    .game-summary button {
+        margin: 10px;
+        padding: 12px 25px;
+    }
     </style>
+    <link rel="manifest" href="https://raw.githubusercontent.com/yourusername/your-repo/main/manifest.json">
+    <meta name="theme-color" content="#2E7D32">
 </head>
 <body>
     <div class="container">
@@ -265,6 +290,7 @@
             
             <div class="controls">
                 <button id="prevPlayer">السابق</button>
+                <button id="endGame">نهاية اللعبة</button>
                 <button id="nextPlayer">التالي</button>
             </div>
         </div>
@@ -291,7 +317,36 @@
         const nextPlayerBtn = document.getElementById('nextPlayer');
         const currentPlayerNumSpan = document.getElementById('currentPlayerNum');
         const totalPlayersSpan = document.getElementById('totalPlayers');
-        
+        // عناصر DOM الجديدة
+        const endGameBtn = document.getElementById('endGame');
+
+        // دالة إنهاء اللعبة المعدلة
+        function endGame() {
+            // إظهار رسالة تلخيصية
+            const summary = `
+                <div class="game-summary">
+                    <h2>ملخص اللعبة</h2>
+                    <p>لقد استعرضت ${currentIndex - (startPlayer - 1)} لاعباً من ${totalPlayers}</p>
+                    <button id="newGame">لعبة جديدة</button>
+                    <button id="exitGame">خروج</button>
+                </div>
+            `;
+            
+            gameArea.innerHTML = summary;
+            
+            // أحداث الأزرار الجديدة
+            document.getElementById('newGame').addEventListener('click', () => {
+                location.reload();
+            });
+            
+            document.getElementById('exitGame').addEventListener('click', () => {
+                if (navigator.app) {
+                    navigator.app.exitApp();
+                } else {
+                    window.close();
+                }
+            });
+        }
         // رابط JSON من GitHub
         const PLAYERS_JSON_URL = 'https://raw.githubusercontent.com/MAHOMD9090/Players/refs/heads/main/Players.json';
         
@@ -340,7 +395,7 @@
                 return;
             }
             
-            currentIndex = startPlayer - 1;
+            //currentIndex = startPlayer - 1;
             
             // تحديث واجهة المستخدم
             currentPlayerNumSpan.textContent = currentIndex + 1;
@@ -396,6 +451,7 @@
             startGameBtn.addEventListener('click', startGame);
             nextPlayerBtn.addEventListener('click', nextPlayer);
             prevPlayerBtn.addEventListener('click', prevPlayer);
+            endGameBtn.addEventListener('click', endGame);
             
             // أحداث لوحة المفاتيح
             document.addEventListener('keydown', (e) => {
