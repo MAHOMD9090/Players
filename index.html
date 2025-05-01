@@ -4,154 +4,267 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#2E7D32">
-    <title>تخمين لاعب كرة قدم</title>
+    <title>تخمين اللاعبين</title>
     <style>
+        :root {
+            --primary-color: #2E7D32;
+            --secondary-color: #f5f5f5;
+            --text-color: #333;
+            --white: #ffffff;
+        }
+        
         * {
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+        
         body {
             margin: 0;
-            padding: 10px;
-            background-color: #f5f5f5;
-            text-align: center;
-            height: 100vh;
+            padding: 0;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
+        
         .container {
             max-width: 100%;
             margin: 0 auto;
-            background-color: white;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             flex: 1;
             display: flex;
             flex-direction: column;
         }
-        h1 {
-            color: #2E7D32;
-            margin-top: 0;
+        
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
+        
+        h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        
+        .setup {
+            background-color: var(--white);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
         .game-area {
             display: none;
             flex: 1;
             flex-direction: column;
-            justify-content: space-between;
+            background-color: var(--white);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .image-container {
-            margin: 20px 0;
+        
+        .player-card {
             flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            padding: 20px;
         }
+        
+        .player-image-container {
+            width: 100%;
+            max-width: 600px;
+            height: 400px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background-color: #f0f0f0;
+        }
+        
         .player-image {
             max-width: 100%;
-            max-height: 70vh;
-            width: auto;
-            height: auto;
-            border-radius: 5px;
+            max-height: 100%;
             object-fit: contain;
+            transition: transform 0.3s ease;
         }
+        
+        .player-image:hover {
+            transform: scale(1.02);
+        }
+        
+        .player-info {
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+        }
+        
         .player-name {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: bold;
-            margin-top: 15px;
-            color: #2E7D32;
+            margin-bottom: 10px;
+            color: var(--primary-color);
         }
+        
+        .player-club {
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
         .controls {
-            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
         }
+        
         button {
-            background-color: #2E7D32;
-            color: white;
+            background-color: var(--primary-color);
+            color: var(--white);
             border: none;
             padding: 12px 25px;
-            margin: 5px;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 18px;
             min-width: 120px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
+        
+        button:hover {
+            background-color: #1B5E20;
+            transform: translateY(-2px);
+        }
+        
         button:disabled {
             background-color: #cccccc;
             cursor: not-allowed;
+            transform: none;
         }
-        input, select {
-            padding: 10px;
-            margin: 5px;
+        
+        .progress {
+            font-size: 18px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        select, input {
+            padding: 10px 15px;
+            margin: 10px 5px;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 6px;
+            font-size: 16px;
             width: 100%;
             max-width: 200px;
         }
-        .progress {
-            margin: 20px 0;
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
             font-weight: bold;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
             font-size: 18px;
         }
-        .setup {
-            margin-bottom: 20px;
-        }
-        .instructions {
-            background-color: #f9f9f9;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 20px 0;
-            text-align: right;
-        }
-        @media (max-width: 600px) {
-            .player-image {
-                max-height: 60vh;
+        
+        @media (max-width: 768px) {
+            .player-image-container {
+                height: 300px;
             }
+            
+            .player-name {
+                font-size: 24px;
+            }
+            
+            .player-club {
+                font-size: 18px;
+            }
+            
             button {
                 padding: 10px 20px;
                 font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .player-image-container {
+                height: 250px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            button {
+                width: 100%;
+                max-width: 200px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>تخمين لاعب كرة قدم</h1>
-        
-        <div class="instructions">
-            <h3>كيفية اللعب:</h3>
-            <p>1. اختر عدد الجولات والصورة البدائية</p>
-            <p>2. سيتم عرض صورة لاعب مع اسمه</p>
-            <p>3. اضغط على "التالي" للانتقال للاعب التالي</p>
-        </div>
+        <header>
+            <h1>تخمين اللاعبين</h1>
+        </header>
         
         <div class="setup">
-            <h2>إعدادات اللعبة</h2>
             <div>
                 <label for="rounds">عدد الجولات:</label>
                 <select id="rounds">
-                    <option value="3">3</option>
-                    <option value="5">5</option>
-                    <option value="7">7</option>
-                    <option value="15">15</option>
+                    <option value="3">3 لاعبين</option>
+                    <option value="5">5 لاعبين</option>
+                    <option value="7">7 لاعبين</option>
+                    <option value="10">10 لاعبين</option>
+                    <option value="15">15 لاعبين</option>
                 </select>
             </div>
             <div>
-                <label for="startImage">الصورة البدائية (1-80):</label>
-                <input type="number" id="startImage" min="1" max="80" value="1">
+                <label for="startPlayer">بدء من اللاعب رقم:</label>
+                <input type="number" id="startPlayer" min="1" value="1">
             </div>
-            <button id="startGame">بدء اللعبة</button>
+            <button id="startGame">بدء العرض</button>
         </div>
         
-        <div class="game-area">
-            <div class="progress">الجولة <span id="currentRound">1</span> من <span id="totalRounds">5</span></div>
+        <div class="loading" id="loading">
+            جاري تحميل بيانات اللاعبين...
+        </div>
+        
+        <div class="game-area" id="gameArea">
+            <div class="progress">لاعب رقم <span id="currentPlayerNum">1</span> من <span id="totalPlayers">5</span></div>
             
-            <div class="image-container">
-                <img id="playerImage" class="player-image" src="" alt="لاعب كرة قدم">
-                <div id="playerName" class="player-name"></div>
+            <div class="player-card">
+                <div class="player-image-container">
+                    <img id="playerImage" class="player-image" src="" alt="لاعب كرة قدم">
+                </div>
+                
+                <div class="player-info">
+                    <div id="playerName" class="player-name"></div>
+                    <div id="playerClub" class="player-club"></div>
+                </div>
             </div>
             
             <div class="controls">
+                <button id="prevPlayer">السابق</button>
                 <button id="nextPlayer">التالي</button>
             </div>
         </div>
@@ -160,98 +273,141 @@
     <script>
         // بيانات التطبيق
         let players = [];
-        let currentRound = 0;
-        let totalRounds = 5;
-        let startImage = 1;
-        let currentPlayerIndex = 0;
+        let currentIndex = 0;
+        let totalPlayers = 5;
+        let startPlayer = 1;
+        let maxPlayers = 0;
         
         // عناصر DOM
         const roundsSelect = document.getElementById('rounds');
-        const startImageInput = document.getElementById('startImage');
+        const startPlayerInput = document.getElementById('startPlayer');
         const startGameBtn = document.getElementById('startGame');
-        const gameArea = document.querySelector('.game-area');
+        const gameArea = document.getElementById('gameArea');
+        const loadingDiv = document.getElementById('loading');
         const playerImage = document.getElementById('playerImage');
         const playerName = document.getElementById('playerName');
+        const playerClub = document.getElementById('playerClub');
+        const prevPlayerBtn = document.getElementById('prevPlayer');
         const nextPlayerBtn = document.getElementById('nextPlayer');
-        const currentRoundSpan = document.getElementById('currentRound');
-        const totalRoundsSpan = document.getElementById('totalRounds');
+        const currentPlayerNumSpan = document.getElementById('currentPlayerNum');
+        const totalPlayersSpan = document.getElementById('totalPlayers');
         
-        // تحميل بيانات اللاعبين من ملف players.json
+        // رابط JSON من GitHub
+        const PLAYERS_JSON_URL = 'https://raw.githubusercontent.com/MAHOMD9090/Players/refs/heads/main/Players.json';
+        
+        // تحميل بيانات اللاعبين من GitHub
         async function loadPlayers() {
             try {
-                const response = await fetch('players.json');
-                if (!response.ok) throw new Error('Network response was not ok');
+                loadingDiv.style.display = 'block';
+                gameArea.style.display = 'none';
+                
+                const response = await fetch(PLAYERS_JSON_URL);
+                if (!response.ok) throw new Error('فشل في تحميل البيانات');
                 
                 players = await response.json();
-                console.log('تم تحميل', players.length, 'لاعب');
+                maxPlayers = players.length;
+                startPlayerInput.max = maxPlayers;
+                
+                console.log('تم تحميل', maxPlayers, 'لاعب');
+                loadingDiv.style.display = 'none';
                 return true;
             } catch (error) {
                 console.error('حدث خطأ في تحميل بيانات اللاعبين:', error);
-                alert('حدث خطأ في تحميل بيانات اللاعبين. يرجى التأكد من اتصال الإنترنت ثم إعادة تحميل الصفحة.');
+                loadingDiv.innerHTML = 'حدث خطأ في تحميل بيانات اللاعبين. يرجى المحاولة لاحقاً.';
                 return false;
             }
         }
         
-        // بدء اللعبة
+        // بدء العرض
         async function startGame() {
-            // تحميل اللاعبين أولاً
-            const loaded = await loadPlayers();
-            if (!loaded) return;
+            // تحميل اللاعبين أولاً إذا لم يتم تحميلهم بعد
+            if (players.length === 0) {
+                const loaded = await loadPlayers();
+                if (!loaded) return;
+            }
             
-            totalRounds = parseInt(roundsSelect.value);
-            startImage = parseInt(startImageInput.value);
+            totalPlayers = parseInt(roundsSelect.value);
+            startPlayer = parseInt(startPlayerInput.value);
             
-            if (startImage < 1 || startImage > players.length) {
-                alert(`يجب أن تكون الصورة البدائية بين 1 و ${players.length}`);
+            // التحقق من المدخلات
+            if (isNaN(startPlayer) || startPlayer < 1 || startPlayer > maxPlayers) {
+                alert(`يجب أن يكون رقم اللاعب بين 1 و ${maxPlayers}`);
                 return;
             }
             
-            if (startImage + totalRounds - 1 > players.length) {
-                alert('لا يوجد لاعبون كافيون للجولات المطلوبة. يرجى اختيار عدد أقل أو صورة بدائية أبكر.');
+            if (startPlayer + totalPlayers - 1 > maxPlayers) {
+                alert(`لا يوجد لاعبون كافيون للعرض. آخر لاعب متاح هو رقم ${maxPlayers}`);
                 return;
             }
             
-            currentRound = 1;
-            currentPlayerIndex = startImage - 1;
+            currentIndex = startPlayer - 1;
             
             // تحديث واجهة المستخدم
-            currentRoundSpan.textContent = currentRound;
-            totalRoundsSpan.textContent = totalRounds;
+            currentPlayerNumSpan.textContent = currentIndex + 1;
+            totalPlayersSpan.textContent = totalPlayers;
             gameArea.style.display = 'flex';
             
             // تحميل اللاعب الأول
             loadPlayer();
+            updateNavButtons();
         }
         
-        // تحميل اللاعب الحالي
+        // تحميل بيانات اللاعب الحالي
         function loadPlayer() {
-            const player = players[currentPlayerIndex];
+            const player = players[currentIndex];
             playerImage.src = player.image;
+            playerImage.alt = player.name;
             playerName.textContent = player.name;
+            playerClub.textContent = player.club || 'غير محدد';
+            
+            currentPlayerNumSpan.textContent = currentIndex + 1;
+        }
+        
+        // تحديث أزرار التنقل
+        function updateNavButtons() {
+            prevPlayerBtn.disabled = currentIndex <= startPlayer - 1;
+            nextPlayerBtn.disabled = currentIndex >= startPlayer + totalPlayers - 2;
         }
         
         // الانتقال للاعب التالي
         function nextPlayer() {
-            currentRound++;
-            currentPlayerIndex++;
-            
-            if (currentRound <= totalRounds) {
-                currentRoundSpan.textContent = currentRound;
+            if (currentIndex < startPlayer + totalPlayers - 2) {
+                currentIndex++;
                 loadPlayer();
-            } else {
-                endGame();
+                updateNavButtons();
             }
         }
         
-        // إنهاء اللعبة
-        function endGame() {
-            gameArea.style.display = 'none';
-            alert('انتهت اللعبة! شكراً للمشاركة');
+        // العودة للاعب السابق
+        function prevPlayer() {
+            if (currentIndex > startPlayer - 1) {
+                currentIndex--;
+                loadPlayer();
+                updateNavButtons();
+            }
         }
         
-        // أحداث
-        startGameBtn.addEventListener('click', startGame);
-        nextPlayerBtn.addEventListener('click', nextPlayer);
+        // أحداث الصفحة
+        document.addEventListener('DOMContentLoaded', () => {
+            // تحميل اللاعبين عند فتح الصفحة
+            loadPlayers();
+            
+            // أحداث الأزرار
+            startGameBtn.addEventListener('click', startGame);
+            nextPlayerBtn.addEventListener('click', nextPlayer);
+            prevPlayerBtn.addEventListener('click', prevPlayer);
+            
+            // أحداث لوحة المفاتيح
+            document.addEventListener('keydown', (e) => {
+                if (!gameArea.style.display || gameArea.style.display === 'none') return;
+                
+                if (e.key === 'ArrowRight') {
+                    nextPlayer();
+                } else if (e.key === 'ArrowLeft') {
+                    prevPlayer();
+                }
+            });
+        });
     </script>
 </body>
 </html>
